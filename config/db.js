@@ -8,7 +8,7 @@ const URI = process.env.MONGO_URI ;
 const connectDB = async () => {
   try {
     await mongoose.connect(URI, {
-
+name:"mern auth"
     });
     console.log("✅ MongoDB connected successfully");
   } catch (error) {
