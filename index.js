@@ -6,10 +6,11 @@ configDotenv()
 
 await connectdb()
 const app = express() 
-app.use(express.json)
+app.use(express.json())
 const PORT = process.env.PORT || 6969
  import userRouter from './routers/userRouter.js'
  app.use("/api/v1",userRouter)
+ 
 app.listen(PORT,()=>{
     console.log("server started on "+PORT)
 })
