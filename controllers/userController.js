@@ -6,6 +6,7 @@ import { User } from "../models/userSchema.js";
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 import sendMail from "../config/sendmail.js";
+import { getVerifyEmailHtml } from "../config/html.js";
 
 export const registerUser = tryCatch(async (req, res) => {
   const sanitizedBody = sanitize(req.body);
@@ -31,7 +32,7 @@ export const registerUser = tryCatch(async (req, res) => {
   const { name, email, password } = validation.data;
 
 const rateLimitKey= `register rate limit ${req.ip}: ${email}`
-
+console.log(email)
 if ( await RedisClient.get(rateLimitKey)){
   res.status(429).json({
     message:"too many request , try again later"
@@ -60,9 +61,9 @@ const dataTOstore = JSON.stringify({
 await RedisClient.set(verifyKey,dataTOstore,{EX: 300})
 
  const subject="verify your email for account creation"
- const html =``
+ const html =getVerifyEmailHtml({email,token: verifytoken})
 
-await sendMail({email,subject,html})
+await sendMail(email,subject,html )
 
 await RedisClient.set( rateLimitKey,"true",{EX: 60})
 
