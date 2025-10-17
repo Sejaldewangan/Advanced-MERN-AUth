@@ -3,20 +3,20 @@ import mongoose, { Mongoose } from "mongoose";
 
 const schema = new mongoose.Schema({
     name:{
-        type:string,
+        type:String,
         require:true
     }, 
     email:{
-        type:string,
+        type:String,
          require:true,
          unique:true
     },
     password:{
-        type:string,
+        type:String,
           require:true,
     },
     role:{
-        type:string,
+        type:String,
         default:"user"
     },
 },{timestamps:true}) 

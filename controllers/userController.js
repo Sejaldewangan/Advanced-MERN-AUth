@@ -3,7 +3,7 @@ import sanitize from "mongo-sanitize";
 import { registerSchema } from "../config/zod.js";
 import { RedisClient } from "../index.js";
 import { User } from "../models/userSchema.js";
-import bycrpt from "bycrpt"
+import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 import sendMail from "../config/sendmail.js";
 
@@ -48,7 +48,7 @@ if(exsistingUser){
   })
 }
 
-const hassedPassword = bycrpt.hash(password,10)
+const hassedPassword = bcrypt.hash(password,10)
 
 const verifytoken=crypto.randomBytes(32).toString('hex')
 const verifyKey = `verify:${verifytoken}`
@@ -64,7 +64,7 @@ await RedisClient.set(verifyKey,dataTOstore,{EX: 300})
 
 await sendMail({email,subject,html})
 
-await
+await RedisClient.set( rateLimitKey,"true",{EX: 60})
 
-  return res.status(200).json({ name, email, password });
+  return res.status(200).json({statement:"if your email is valid , a verification link has been sent , it will be expired in 5m"});
 });
